@@ -1,6 +1,9 @@
 """
 File that will get the tracks from a Spotify playlist
 """
+import cv2
+import numpy as np
+import requests
 import spotipy
 import os
 
@@ -28,7 +31,7 @@ def get_track_data(playlistId):
         playlist = sp.playlist_tracks(playlistId)
 
     except spotipy.SpotifyException as e:
-        raise Exception(e)
+        raise e
 
     # extract useful attributes
     seenAlbums = [] #ensures that we don't get duplicate images
@@ -37,16 +40,39 @@ def get_track_data(playlistId):
         albumId = item["track"]["album"]["id"]
         if albumId not in seenAlbums:
             track = {}
-            track["song_id"] = item["track"]["id"]
-            track["track_image"] = item["track"]["album"]["images"][2]["url"]
+            track["songId"] = item["track"]["id"]
+            track["imageURL"] = item["track"]["album"]["images"][2]["url"]
             tracks.append(track)
             seenAlbums.append(albumId)
 
     return tracks
 
+def get_images(trackData):
+    for image in trackData:
+        try:
+            url = image["imageURL"]
+
+            res = requests.get(url, stream = True)
+            # print(type(res.content))
+
+            npArr = np.frombuffer(res.content, np.uint8)
+            # print(type(npArr))
+
+            imgArr = cv2.imdecode(npArr, cv2.IMREAD_UNCHANGED)
+            # print(type(imgArr))
+
+            print(f"Got track image for: {image['songId']}")
+
+        except requests.exceptions.RequestException as e:
+            # print("Call to Spotify to download track image failed: Ensure id is correct")
+            raise e
+
+
 def main():
     track_data = get_track_data(PLAYLIST_ID)
     print(len(track_data))
+
+    get_images(track_data)
 
 
 if __name__=="__main__":
