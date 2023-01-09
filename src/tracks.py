@@ -10,6 +10,8 @@ import os
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyClientCredentials
 from logging import raiseExceptions
+from sklearn.cluster import KMeans
+from collections import Counter
 
 load_dotenv() #load envirnoment vars from .env files
 
@@ -47,32 +49,71 @@ def get_track_data(playlistId):
 
     return tracks
 
-def get_images(trackData):
+def get_images_dominant_color(trackData):
+    image_objects = []
     for image in trackData:
+        
         try:
             url = image["imageURL"]
-
             res = requests.get(url, stream = True)
-            # print(type(res.content))
-
             npArr = np.frombuffer(res.content, np.uint8)
-            # print(type(npArr))
-
             imgArr = cv2.imdecode(npArr, cv2.IMREAD_UNCHANGED)
-            # print(type(imgArr))
 
-            print(f"Got track image for: {image['songId']}")
+            color = most_dominent_coler(imgArr)
+
+            imgData = {
+                "color" : color,
+                "image" : imgArr
+            }
+
+            image_objects.append(imgData)
 
         except requests.exceptions.RequestException as e:
             # print("Call to Spotify to download track image failed: Ensure id is correct")
             raise e
+            
+    return image_objects
+    
+
+def most_dominent_coler(imgArr, size=(16, 16), k=4):
+    # resize image for faster processing
+    image = cv2.resize(imgArr, size, 
+                            interpolation = cv2.INTER_AREA)
+
+    # turn image array into 1D array 
+    image = image.reshape((image.shape[0] * image.shape[1], 3))
+
+    #cluster and assign labels to the pixels 
+    clt = KMeans(n_clusters = k)
+    labels = clt.fit_predict(image)
+
+    #count labels to find most popular
+    label_counts = Counter(labels)
+
+    #subset out most popular centroid and round color
+    dominant_color = clt.cluster_centers_[label_counts.most_common(1)[0][0]]
+    rounded = np.around(dominant_color)
+    # image = np.zeros((16, 16, 3), np.uint8)
+    # image[:] = dominant_color
+    # save_image("./images/second-image-dominant-color.png", image)
+
+    return rounded
+
+def save_image(filename, imgArr):
+    cv2.imwrite(filename, imgArr)
+
+def resize_image(imgArr, size=(16, 16)):
+    image = cv2.resize(imgArr, size, 
+                            interpolation = cv2.INTER_AREA)
+
+    return image
 
 
 def main():
     track_data = get_track_data(PLAYLIST_ID)
     print(len(track_data))
 
-    get_images(track_data)
+    imageData = get_images_dominant_color(track_data)
 
 
 if __name__=="__main__":
