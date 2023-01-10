@@ -147,27 +147,6 @@ def main():
     img = cv2.imread(pathToImg)
 
     create_mosaic()
-    # list_of_colors = [[52,211,235],[150,33,77],[75,99,23],[45,88,250],[250,0,255]]
-    # color = [52,189,235]
-    # closetColor = closest_color(list_of_colors, color)
-    # print(closetColor)
-
-    # image = np.zeros((16, 16, 3), np.uint8)
-    # image[:] = color
-    # save_image("./images/closest-original.png", image)
-
-    # image[:] = closetColor
-    # save_image("./images/closest-color.png", image)
-
-    
-    # print(img)
-
-    
-    color = [0,0,0] #img[0][0]
-    index, closetColor = closest_color(list_of_colors, color)
-    print(color)
-    print(closetColor[0])
-    print(list_of_colors[index])
 
 
 if __name__=="__main__":
