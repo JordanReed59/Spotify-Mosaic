@@ -122,6 +122,20 @@ def resize_image(imgArr, size=(16, 16)):
 
     return image
 
+def create_mosaic():
+    # resize org image and create new blank image
+    # loop thru each pixel and find closest color
+    # write color to image
+    width = 100
+    height = 100
+
+    for i in range(width):
+        for j in range(height):
+            pass
+    pass
+
+def paste_tile(image, tile):
+    pass
 
 def main():
     track_data = get_track_data(PLAYLIST_ID)
@@ -129,8 +143,10 @@ def main():
 
     imageData, colors = get_images_dominant_color(track_data)
 
-    print(colors)
-    list_of_colors = colors
+    pathToImg = "./images/beach-255x198.jpeg"
+    img = cv2.imread(pathToImg)
+
+    create_mosaic()
     # list_of_colors = [[52,211,235],[150,33,77],[75,99,23],[45,88,250],[250,0,255]]
     # color = [52,189,235]
     # closetColor = closest_color(list_of_colors, color)
@@ -143,8 +159,7 @@ def main():
     # image[:] = closetColor
     # save_image("./images/closest-color.png", image)
 
-    path = "./images/beach-255x198.jpeg"
-    img = cv2.imread(path)
+    
     # print(img)
 
     
