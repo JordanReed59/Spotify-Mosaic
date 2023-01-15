@@ -19,6 +19,9 @@ load_dotenv() #load envirnoment vars from .env files
 CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 PLAYLIST_ID = "1BXj2SlxJLcXSy07Fv9Bgg"
+TRACK_IMAGE_HIEGHT = 64
+TRACK_IMAGE_WIDTH = 64
+
 
 """
 Function that extracts track data from a playlist
@@ -134,8 +137,19 @@ def create_mosaic():
             pass
     pass
 
-def paste_tile(image, tile):
-    pass
+"""
+Function will write smaller image to larger image at a specified coordinate
+
+@param: image - image object that will be written to
+@param: tile - smaller image that 
+@param: coord - the x and y coordinate where the tile will be pasted
+"""
+def paste_tile(image, tile, coord):
+    x1, x2 = coord[1], coord[1] + TRACK_IMAGE_WIDTH
+    y1, y2 = coord[0], coord[0] + TRACK_IMAGE_HIEGHT
+
+    image[y1:y2, x1:x2] = tile
+
 
 def main():
     track_data = get_track_data(PLAYLIST_ID)
@@ -143,10 +157,18 @@ def main():
 
     imageData, colors = get_images_dominant_color(track_data)
 
-    pathToImg = "./images/beach-255x198.jpeg"
-    img = cv2.imread(pathToImg)
+    # pathToImg = "./images/beach-255x198.jpeg"
+    # img = cv2.imread(pathToImg)
 
-    create_mosaic()
+    # create_mosaic()
+
+
+    track_img = imageData[0]["image"]
+    # print(track_img)
+    blank_image = np.zeros((100,100,3), np.uint8)
+    paste_tile(blank_image, track_img, (0,0))
+    save_image("./images/testPastedTile.jpg", blank_image)
+
 
 
 if __name__=="__main__":
