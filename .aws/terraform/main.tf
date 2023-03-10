@@ -34,15 +34,24 @@ data "aws_iam_policy_document" "allow_public_access" {
 }
 
 ########## Lambda configuration ##########
-data "archive_file" "zip_the_python_code" {
+data "archive_file" "python_code_zip" {
 type        = "zip"
 source_dir  = "${path.module}/../../src/backend"
 output_path = "${path.module}/python/mosaify.zip"
 }
 
+resource "aws_lambda_function" "terraform_lambda_func" {
+filename                       = "${path.module}/python/mosaify.zip"
+function_name                  = "mosaify_backend"
+role                           = aws_iam_role.lambda_role.arn
+handler                        = "test.lambda_handler"
+runtime                        = "python3.8"
+depends_on                     = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
+}
+
 ########## Role configuration ##########
 resource "aws_iam_role" "lambda_role" {
-name   = "spotify-mosaic-lambda-backend-role"
+name   = "mosaify-lambda-backend-role"
 assume_role_policy = data.aws_iam_policy_document.lambda_role.json 
 }
 
@@ -65,8 +74,8 @@ resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
 }
 
 resource "aws_iam_policy" "iam_policy_for_lambda" {
- name         = "spotify-mosaic-lambda-backend-role-policy"
- description  = "AWS IAM Policy for managing spotify mosaic aws lambda role"
+ name         = "mosaify-lambda-backend-role-policy"
+ description  = "AWS IAM Policy for managing mosaify lambda role"
  policy       = data.aws_iam_policy_document.role_policy.json
 }
 
