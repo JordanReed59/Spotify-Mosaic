@@ -101,7 +101,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: .aws/terraform
+        working-directory: .
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
@@ -116,7 +116,7 @@ jobs:
       - name: Copy files to the test website with the AWS CLI
         env:
             AWS_STATIC_BUCKET_NAME: "static-website-test-jr59"
-        run: aws s3 sync ../src s3://$AWS_STATIC_BUCKET_NAME
+        run: aws s3 sync ./src s3://$AWS_STATIC_BUCKET_NAME
 
   # destroy:
   #   needs: [plan, apply]
