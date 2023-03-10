@@ -18,7 +18,9 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
 data "aws_iam_policy_document" "allow_public_access" {
   statement {
     effect = "Allow"
-    actions = "s3:GetObject"
+    actions = [
+      "s3:GetObject"
+    ]
     principals {
       type        = "*"
       identifiers = ["*"]
