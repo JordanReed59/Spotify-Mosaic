@@ -1,0 +1,12 @@
+name: "Terraform action"
+on:
+  worflow_dispatch
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Say something
+      - run: echo "Hello?"
