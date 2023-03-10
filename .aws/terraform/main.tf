@@ -1,6 +1,7 @@
 ########## S3 configuration ##########
 resource "aws_s3_bucket" "bucket" {
   bucket = "static-website-test-jr59"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_website_configuration" "website_bucket" {
