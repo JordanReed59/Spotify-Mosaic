@@ -96,7 +96,7 @@ jobs:
 
   file upload:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: plan
+    needs: [plan, apply]
     runs-on: ubuntu-latest
     defaults:
       run:
