@@ -1,17 +1,11 @@
-data "aws_iam_policy_document" "assume_policy" {
-  statement {
-    sid = "AssumeLmabdaRole"
-    actions = [
-      "sts:AssumeRole"
-    ]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
+resource "aws_s3_bucket" "bucket" {
+  bucket = "static-website-test"
 }
 
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda"
-  assume_role_policy = data.aws_iam_policy_document.assume_policy.json
+resource "aws_s3_bucket_website_configuration" "website_bucket" {
+  bucket = aws_s3_bucket.bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
 }
