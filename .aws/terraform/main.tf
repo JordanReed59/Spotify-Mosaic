@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "allow_public_access" {
 ########## Lambda configuration ##########
 data "archive_file" "zip_the_python_code" {
 type        = "zip"
-source_dir  = "${path.module}/src/backend/"
+source_dir  = "${path.module}/../src/backend/"
 output_path = "${path.module}/python/mosaify.zip"
 }
 
