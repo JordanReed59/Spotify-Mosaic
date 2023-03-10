@@ -116,7 +116,7 @@ jobs:
       - name: Copy files to the test website with the AWS CLI
         env:
             AWS_STATIC_BUCKET_NAME: "static-website-test-jr59"
-        run: aws s3 sync ./src s3://$AWS_STATIC_BUCKET_NAME
+        run: aws s3 sync ./src/frontend s3://$AWS_STATIC_BUCKET_NAME
 
   # destroy:
   #   needs: [plan, apply]
