@@ -119,7 +119,7 @@ jobs:
         run: aws s3 sync ./src/frontend s3://$AWS_STATIC_BUCKET_NAME
 
   destroy:
-    needs: [plan, apply]
+    needs: [plan, apply, file_upload]
     runs-on: ubuntu-latest
     defaults:
       run:
