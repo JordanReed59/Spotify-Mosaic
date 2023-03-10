@@ -94,6 +94,30 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -input=false
 
+  file upload:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .aws/terraform
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: GitHub-OIDC-TERRAFORM
+
+      - name: Copy files to the test website with the AWS CLI
+        env:
+            AWS_STATIC_BUCKET_NAME: "static-website-test-jr59"
+        run: aws s3 sync ../src s3://${{ $AWS_STATIC_BUCKET_NAME }}
+
   # destroy:
   #   needs: [plan, apply]
   #   runs-on: ubuntu-latest
