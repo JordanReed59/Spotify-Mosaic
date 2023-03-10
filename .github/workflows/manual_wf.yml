@@ -9,4 +9,4 @@ jobs:
         shell: bash
     steps:
       - name: Say something
-      - run: echo "Hello?"
+        run: echo "Hello?"
