@@ -94,7 +94,7 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -input=false
 
-  file upload:
+  file_upload:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: [plan, apply]
     runs-on: ubuntu-latest
