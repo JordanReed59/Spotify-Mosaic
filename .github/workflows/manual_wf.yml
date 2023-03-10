@@ -1,4 +1,4 @@
-name: "Terraform action"
+name: "manual workflow test"
 on:
   workflow_dispatch
 jobs:
