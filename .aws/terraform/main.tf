@@ -41,12 +41,6 @@ data "archive_file" "python_code_zip" {
   output_path = "${path.module}/python/mosaify.zip"
 }
 
-data "archive_file" "python_layer_zip" {
-  type        = "zip"
-  source_file  = "${path.module}/python_layer"
-  output_path = "${path.module}/python_layer.zip"
-}
-
 resource "aws_lambda_layer_version" "lambda_layer" {
   filename   = "python_layer.zip"
   layer_name = "python_dependencies"
