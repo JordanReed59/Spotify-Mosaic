@@ -11,7 +11,6 @@ env:
 jobs:
   build:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: plan
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,9 +37,10 @@ jobs:
           name: python_layer
           path: .aws/terraform/python_layer.zip
           if-no-files-found: error
-          
+
   plan:
     runs-on: ubuntu-latest
+    needs: build
     defaults:
       run:
         shell: bash
@@ -55,6 +55,15 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM
+          
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python_layer
+          path: .aws/terraform/
+
+      - name: Unzip python dependencies
+        run: unzip python_layer.zip
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -88,7 +97,7 @@ jobs:
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: build
+    needs: plan
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -111,7 +120,7 @@ jobs:
           name: python_layer
           path: .aws/terraform/
 
-      - name: Zip python dependencies
+      - name: Unzip python dependencies
         run: unzip python_layer.zip
 
       - name: Setup Terraform
