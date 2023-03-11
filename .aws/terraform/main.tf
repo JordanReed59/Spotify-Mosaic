@@ -47,7 +47,7 @@ function_name                  = "mosaify_backend"
 role                           = aws_iam_role.lambda_role.arn
 handler                        = "test.lambda_handler"
 runtime                        = "python3.8"
-source_code_hash               = "${data.archive_file.python_code_zip.output_base64sha256}"
+source_code_hash               = "${data.archive_file.python_code_zip.output_base64sha256}" #allows for the src code to be updated
 depends_on                     = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
 }
 
