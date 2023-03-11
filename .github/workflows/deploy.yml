@@ -74,10 +74,10 @@ jobs:
           python-version: '3.8'
 
       - name: Install python dependencies
-        run: pip install -r ./layers/requirements.txt -t ./python;ls
+        run: pip install -r ./layers/requirements.txt -t ./python
 
       - name: Zip python dependencies
-        run: zip -r python_layer.zip python;
+        run: zip -r python_layer.zip python;ls
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
