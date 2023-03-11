@@ -56,7 +56,7 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-  pre_deploy:
+  build:
     # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # needs: plan
     runs-on: ubuntu-latest
