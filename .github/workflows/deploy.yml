@@ -73,11 +73,11 @@ jobs:
         with:
           python-version: '3.8' 
           # cache: 'pip'
-        run: pip install -r ./layers/requirements.txt -t ./python
+        # run: pip install -r ./layers/requirements.txt -t ./python
 
-      - name: Zip dependencies
-        uses: actions/checkout@v3
-        run: ls
+      - name: Install python dependencies
+        # uses: actions/checkout@v3
+        run: pip install -r ./layers/requirements.txt -t ./python
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
