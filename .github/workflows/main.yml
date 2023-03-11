@@ -121,6 +121,8 @@ jobs:
   destroy:
     needs: [plan, apply, file_upload]
     runs-on: ubuntu-latest
+    on:
+      workflow_dispatch
     defaults:
       run:
         shell: bash
