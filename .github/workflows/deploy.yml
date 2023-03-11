@@ -109,7 +109,7 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -input=false
 
-  file_upload:
+  post_apply:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: [plan, apply]
     runs-on: ubuntu-latest
@@ -132,3 +132,4 @@ jobs:
         env:
             AWS_STATIC_BUCKET_NAME: "static-website-test-jr59"
         run: aws s3 sync ./src/frontend s3://$AWS_STATIC_BUCKET_NAME
+        
