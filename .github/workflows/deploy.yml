@@ -77,7 +77,13 @@ jobs:
         run: pip install -r ./layers/requirements.txt -t ./python;ls
 
       - name: Zip python dependencies
-        run: zip -r python_layer.zip python;ls -lh python_layer.zip
+        run: zip -r python_layer.zip python;
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: python_layer
+          path: python_layer.zip
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -97,6 +103,11 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python_layer
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
