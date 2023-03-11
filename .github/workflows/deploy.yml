@@ -9,38 +9,8 @@ env:
   TF_LOG: INFO
   AWS_REGION: ${{ secrets.AWS_REGION }}
 jobs:
-  build:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: .aws/terraform
-    steps:
-      - name: Git checkout
-        uses: actions/checkout@v3
-
-      - name: Setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-
-      - name: Install python dependencies
-        run: pip install -r ./layers/requirements.txt -t ./python
-
-      - name: Zip python dependencies
-        run: zip -r python_layer.zip python
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: python_layer
-          path: .aws/terraform/python_layer.zip
-          if-no-files-found: error
-
   plan:
     runs-on: ubuntu-latest
-    needs: build
     defaults:
       run:
         shell: bash
@@ -55,15 +25,6 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM
-          
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: python_layer
-          path: .aws/terraform/
-
-      - name: Unzip python dependencies
-        run: unzip python_layer.zip
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -95,9 +56,39 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-  deploy:
+  build:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .aws/terraform
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install python dependencies
+        run: pip install -r ./layers/requirements.txt -t ./python
+
+      - name: Zip python dependencies
+        run: zip -r python_layer.zip python
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: python_layer
+          path: .aws/terraform/python_layer.zip
+          if-no-files-found: error
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -120,8 +111,8 @@ jobs:
           name: python_layer
           path: .aws/terraform/
 
-      - name: Unzip python dependencies
-        run: unzip python_layer.zip
+      # - name: Unzip python dependencies
+      #   run: unzip python_layer.zip
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
