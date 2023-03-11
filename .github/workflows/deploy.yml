@@ -65,15 +65,16 @@ jobs:
         shell: bash
         working-directory: .aws/terraform
     steps:
+      - name: Install python dependencies
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.8' 
-          cache: 'pip'
-      - run: pip install -r ./layers/requirements.txt -t ./python; ls
+          # cache: 'pip'
+        run: pip install -r ./layers/requirements.txt -t ./python
 
-      # - uses: actions/checkout@v3
-      #  - run: zip
+      - uses: actions/checkout@v3
+       - run: ls
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
