@@ -56,6 +56,19 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+  pre_apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .aws/terraform
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8' 
+      - run: pip install -r ./layers/requirements.txt -t ./python
+
   apply:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: plan
