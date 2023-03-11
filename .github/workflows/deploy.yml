@@ -58,7 +58,7 @@ jobs:
 
   pre_deploy:
     # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: plan
+    # needs: plan
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -68,7 +68,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v3
 
-      - name: Install python dependencies
+      - name: Setup python
         uses: actions/setup-python@v4
         with:
           python-version: '3.8' 
