@@ -36,25 +36,32 @@ data "aws_iam_policy_document" "allow_public_access" {
 
 ########## Lambda configuration ##########
 data "archive_file" "python_code_zip" {
-type        = "zip"
-source_dir  = "${path.module}/../../src/backend"
-output_path = "${path.module}/python/mosaify.zip"
+  type        = "zip"
+  source_dir  = "${path.module}/../../src/backend"
+  output_path = "${path.module}/python/mosaify.zip"
+}
+
+resource "aws_lambda_layer_version" "lambda_layer" {
+  filename   = "python.zip"
+  layer_name = "python_dependencies"
+  compatible_runtimes = ["python3.8"]
 }
 
 resource "aws_lambda_function" "terraform_lambda_func" {
-filename                       = "${path.module}/python/mosaify.zip"
-function_name                  = "mosaify_backend"
-role                           = aws_iam_role.lambda_role.arn
-handler                        = "test.lambda_handler"
-runtime                        = "python3.8"
-source_code_hash               = "${data.archive_file.python_code_zip.output_base64sha256}" #allows for the src code to be updated
-depends_on                     = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
+  filename                       = "${path.module}/python/mosaify.zip"
+  function_name                  = "mosaify_backend"
+  role                           = aws_iam_role.lambda_role.arn
+  handler                        = "test.lambda_handler"
+  runtime                        = "python3.8"
+  source_code_hash               = "${data.archive_file.python_code_zip.output_base64sha256}" #allows for the src code to be updated
+  layers                         = [aws_lambda_layer_version.lambda_layer.arn]
+  depends_on                     = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
 }
 
 ########## Role configuration ##########
 resource "aws_iam_role" "lambda_role" {
-name   = "mosaify-lambda-backend-role"
-assume_role_policy = data.aws_iam_policy_document.lambda_role.json 
+  name   = "mosaify-lambda-backend-role"
+  assume_role_policy = data.aws_iam_policy_document.lambda_role.json 
 }
 
 data "aws_iam_policy_document" "lambda_role" {
@@ -71,14 +78,14 @@ data "aws_iam_policy_document" "lambda_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
- role        = aws_iam_role.lambda_role.name
- policy_arn  = aws_iam_policy.iam_policy_for_lambda.arn
+  role        = aws_iam_role.lambda_role.name
+  policy_arn  = aws_iam_policy.iam_policy_for_lambda.arn
 }
 
 resource "aws_iam_policy" "iam_policy_for_lambda" {
- name         = "mosaify-lambda-backend-role-policy"
- description  = "AWS IAM Policy for managing mosaify lambda role"
- policy       = data.aws_iam_policy_document.role_policy.json
+  name         = "mosaify-lambda-backend-role-policy"
+  description  = "AWS IAM Policy for managing mosaify lambda role"
+  policy       = data.aws_iam_policy_document.role_policy.json
 }
 
 
