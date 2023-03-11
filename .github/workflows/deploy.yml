@@ -73,7 +73,7 @@ jobs:
 
   apply:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [pre_apply, apply]
+    needs: [plan, pre_apply]
     runs-on: ubuntu-latest
     defaults:
       run:
