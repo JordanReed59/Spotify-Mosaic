@@ -77,7 +77,7 @@ jobs:
         run: pip install -r ./layers/requirements.txt -t ./python;ls
 
       - name: Zip python dependencies
-        run: zip -r python.zip python;ls
+        run: zip -r python_layer.zip python;ls
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
