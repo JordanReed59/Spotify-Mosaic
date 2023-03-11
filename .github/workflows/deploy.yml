@@ -70,7 +70,7 @@ jobs:
         with:
           python-version: '3.8' 
           cache: 'pip'
-      - run: pip install -r ./layers/requirements.txt -t ./python
+      - run: pip install -r ./layers/requirements.txt -t ./python; ls
 
       # - uses: actions/checkout@v3
       #  - run: zip
