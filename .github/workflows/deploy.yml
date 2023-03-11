@@ -73,7 +73,7 @@ jobs:
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: [plan, pre_deploy]
+    needs: pre_deploy
     runs-on: ubuntu-latest
     defaults:
       run:
