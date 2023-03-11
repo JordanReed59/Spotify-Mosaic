@@ -42,7 +42,7 @@ data "archive_file" "python_code_zip" {
 }
 
 resource "aws_lambda_layer_version" "lambda_layer" {
-  filename   = "python.zip"
+  filename   = "python_layer.zip"
   layer_name = "python_dependencies"
   compatible_runtimes = ["python3.8"]
 }
