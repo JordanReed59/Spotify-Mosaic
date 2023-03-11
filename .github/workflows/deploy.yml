@@ -83,7 +83,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: python_layer
-          path: aws/terraform/python_layer.zip
+          path: .aws/terraform/python_layer.zip
           if-no-files-found: error
 
   deploy:
