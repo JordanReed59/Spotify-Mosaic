@@ -41,6 +41,7 @@ data "archive_file" "python_code_zip" {
   output_path = "${path.module}/python/mosaify.zip"
 }
 
+# issues: not able to update layer when I make changes to it
 resource "aws_lambda_layer_version" "lambda_layer" {
   filename   = "python_layer.zip"
   layer_name = "python_dependencies"
