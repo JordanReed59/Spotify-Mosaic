@@ -43,9 +43,10 @@ data "archive_file" "python_code_zip" {
 
 # issues: not able to update layer when I make changes to it
 resource "aws_lambda_layer_version" "lambda_layer" {
-  filename   = "python_layer.zip"
-  layer_name = "python_dependencies"
+  filename            = "python_layer.zip"
+  layer_name          = "python_dependencies"
   compatible_runtimes = ["python3.8"]
+  source_code_hash    = "${filebase64sha256("python_layer.zip")}"
 }
 
 resource "aws_lambda_function" "terraform_lambda_func" {
