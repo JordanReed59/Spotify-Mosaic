@@ -36,7 +36,7 @@ jobs:
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
           with:
-            name: python_layer
+            # name: python_layer
             path: .aws/terraform/python_layer.*
             if-no-files-found: error
   plan:
@@ -62,6 +62,10 @@ jobs:
         with:
           # name: python_layer
           path: .aws/terraform/
+
+      - name: View directory
+        run: ls
+        # continue-on-error: true
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
