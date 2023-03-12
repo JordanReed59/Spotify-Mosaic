@@ -1,3 +1,8 @@
+########## Locals ##########
+locals {
+  lambda_layer_zips = fileset(path.module, "python_layer.z*")
+}
+
 ########## S3 configuration ##########
 resource "aws_s3_bucket" "bucket" {
   bucket = "static-website-test-jr59"
@@ -42,24 +47,37 @@ data "archive_file" "python_code_zip" {
 }
 
 # issues: not able to update layer when I make changes to it
-resource "aws_lambda_layer_version" "lambda_layer_1" {
-  filename            = "python_layer.zip"
+resource "aws_lambda_layer_version" "lambda_layer" {
+  for_each            = local.lambda_layer_zips
+  filename            = each.value
   layer_name          = "python_dependencies"
   compatible_runtimes = ["python3.8"]
-  source_code_hash    = "${filebase64sha256("python_layer.zip")}"
+  source_code_hash    = "${filebase64sha256(each.value)}"
 }
-resource "aws_lambda_layer_version" "lambda_layer_2" {
-  filename            = "python_layer.z01"
-  layer_name          = "python_dependencies"
-  compatible_runtimes = ["python3.8"]
-  source_code_hash    = "${filebase64sha256("python_layer.z01")}"
-}
-resource "aws_lambda_layer_version" "lambda_layer_3" {
-  filename            = "python_layer.z02"
-  layer_name          = "python_dependencies"
-  compatible_runtimes = ["python3.8"]
-  source_code_hash    = "${filebase64sha256("python_layer.z02")}"
-}
+# resource "aws_lambda_layer_version" "lambda_layer_1" {
+#   filename            = "python_layer.zip"
+#   layer_name          = "python_dependencies"
+#   compatible_runtimes = ["python3.8"]
+#   source_code_hash    = "${filebase64sha256("python_layer.zip")}"
+# }
+# resource "aws_lambda_layer_version" "lambda_layer_2" {
+#   filename            = "python_layer.z01"
+#   layer_name          = "python_dependencies"
+#   compatible_runtimes = ["python3.8"]
+#   source_code_hash    = "${filebase64sha256("python_layer.z01")}"
+# }
+# resource "aws_lambda_layer_version" "lambda_layer_3" {
+#   filename            = "python_layer.z02"
+#   layer_name          = "python_dependencies"
+#   compatible_runtimes = ["python3.8"]
+#   source_code_hash    = "${filebase64sha256("python_layer.z02")}"
+# }
+# resource "aws_lambda_layer_version" "lambda_layer_3" {
+#   filename            = "python_layer.z02"
+#   layer_name          = "python_dependencies"
+#   compatible_runtimes = ["python3.8"]
+#   source_code_hash    = "${filebase64sha256("python_layer.z02")}"
+# }
 resource "aws_lambda_function" "terraform_lambda_func" {
   filename                       = "${path.module}/python/mosaify.zip"
   function_name                  = "mosaify_backend"
@@ -67,7 +85,8 @@ resource "aws_lambda_function" "terraform_lambda_func" {
   handler                        = "test.lambda_handler"
   runtime                        = "python3.8"
   source_code_hash               = "${data.archive_file.python_code_zip.output_base64sha256}" #allows for the src code to be updated
-  layers                         = [aws_lambda_layer_version.lambda_layer_1.arn, aws_lambda_layer_version.lambda_layer_2.arn, aws_lambda_layer_version.lambda_layer_3.arn]
+  # layers                         = [aws_lambda_layer_version.lambda_layer_1.arn, aws_lambda_layer_version.lambda_layer_2.arn, aws_lambda_layer_version.lambda_layer_3.arn]
+  layers                         = [for layer in aws_lambda_layer_version.lambda_layer : layer.arn]
   depends_on                     = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
 }
 
