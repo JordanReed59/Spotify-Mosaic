@@ -60,15 +60,11 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          # name: python_layer
+          name: python_layers
           path: .aws/terraform/
 
       - name: View directory
         run: ls
-        # continue-on-error: true
-
-      # - name: Unzip python layers
-      #   run: unzip python_layer; ls -lh
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -122,11 +118,8 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: python_layer
+          name: python_layers
           path: .aws/terraform/
-
-      # - name: Unzip python dependencies
-      #   run: unzip python_layer.zip
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
