@@ -30,7 +30,7 @@ jobs:
           run: pip install -r ./layers/requirements.txt -t ./python
 
         - name: Zip python dependencies
-          run: zip -qq -r python_layer.zip python;
+          run: zip -q -r python_layer.zip python;
 
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
