@@ -37,7 +37,7 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
             name: python_layer
-            path: .aws/terraform/python_layer.zip
+            path: .aws/terraform/python_layer.*
             if-no-files-found: error
   plan:
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: python_layer
+          # name: python_layer
           path: .aws/terraform/
 
       - name: Setup Terraform
