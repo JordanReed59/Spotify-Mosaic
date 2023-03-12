@@ -11,6 +11,7 @@ env:
 jobs:
   plan:
     runs-on: ubuntu-latest
+    needs: build
     defaults:
       run:
         shell: bash
@@ -58,7 +59,7 @@ jobs:
 
   build:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: plan
+    # needs: plan
     runs-on: ubuntu-latest
     defaults:
       run:
