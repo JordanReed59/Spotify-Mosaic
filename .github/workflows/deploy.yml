@@ -67,8 +67,8 @@ jobs:
         run: ls
         # continue-on-error: true
 
-      - name: Unzip python layers
-        run: unzip python_layer.zip; ls -lh
+      # - name: Unzip python layers
+      #   run: unzip python_layer; ls -lh
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
