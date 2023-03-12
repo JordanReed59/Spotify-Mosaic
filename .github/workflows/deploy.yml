@@ -31,7 +31,7 @@ jobs:
 
         # need to split the zip into multiple parts
         - name: Zip python dependencies
-          run: zip -q -r python_layer.zip python -s 50m; ls -lh
+          run: zip -q -r python_layer.zip python -s 40m; ls -lh
 
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
