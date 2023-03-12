@@ -29,8 +29,9 @@ jobs:
         - name: Install python dependencies
           run: pip install -r ./layers/requirements.txt -t ./python
 
+        # need to split the zip into multiple parts
         - name: Zip python dependencies
-          run: zip -q -r python_layer.zip python;
+          run: zip -q -r python_layer.zip python -s 50m; ls -lh
 
         - name: Upload artifact for deployment job
           uses: actions/upload-artifact@v2
