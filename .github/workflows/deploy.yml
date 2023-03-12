@@ -83,14 +83,14 @@ jobs:
       - name: Install python dependencies
         run: pip install -r ./layers/requirements.txt -t ./python
 
-      - name: Zip python dependencies
-        run: zip -r python_layer.zip python;cd python; ls -lh
+      # - name: Zip python dependencies
+      #   run: zip -r python_layer.zip python;cd python; ls -lh
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: python_layer
-          path: .aws/terraform/python_layer.zip
+          path: .aws/terraform/python
           if-no-files-found: error
 
   deploy:
@@ -115,7 +115,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: python_layer
+          name: python
           path: .aws/terraform/
 
       # - name: Unzip python dependencies
