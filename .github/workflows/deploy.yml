@@ -27,6 +27,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM
 
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python_layer
+          path: .aws/terraform/
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
