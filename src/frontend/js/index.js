@@ -1,4 +1,4 @@
-const url = "https://af49q1sh2m.execute-api.us-east-1.amazonaws.com/test/mosaify";
+const url = "https://af49q1sh2m.execute-api.***.amazonaws.com/test/mosaify";
 const queryStringParameter = "test";
 const queryStringParameterValue = 1234;
 
@@ -17,6 +17,6 @@ const otherParams = {
 };
 
 fetch(url, otherParams)
-// .then(data=>{return data.json()})
-// .then(res=>{console.log(res)})
-// .catch(error=>console.log(error));
+    .then(data => data.json())
+    .then(res => console.log(res))
+    .catch(error => console.log(error))
