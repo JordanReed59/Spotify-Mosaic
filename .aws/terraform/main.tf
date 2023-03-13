@@ -68,7 +68,7 @@ resource "aws_api_gateway_integration" "lambda" {
   uri                     = "${aws_lambda_function.mosaify_backend.invoke_arn}"
 }
 
-resource "aws_api_gateway_deployment" "example" {
+resource "aws_api_gateway_deployment" "deploy_api" {
   depends_on = [
     "aws_api_gateway_integration.lambda"
   ]
