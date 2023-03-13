@@ -1,9 +1,12 @@
 name: "Terraform Destroy"
 on:
   workflow_dispatch
+permissions:
+      id-token: write # This is required for aws oidc connection
+      contents: read # This is required for actions/checkout
+      pull-requests: write # This is required for gh bot to comment PR
 jobs:
   destroy:
-      needs: [plan, apply, file_upload]
       runs-on: ubuntu-latest
       defaults:
         run:
