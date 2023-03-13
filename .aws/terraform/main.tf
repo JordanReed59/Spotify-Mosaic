@@ -99,11 +99,11 @@ resource "aws_api_gateway_integration" "post_lambda" {
 resource "aws_api_gateway_deployment" "deploy_api" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway.id}"
   depends_on = [
-    "aws_api_gateway_integration.get_lambda",
-    "aws_api_gateway_integration.post_lambda",
-    "aws_api_gateway_resource.mosaify_method",
-    "aws_api_gateway_method.get_method",
-    "aws_api_gateway_method.post_method"
+    aws_api_gateway_integration.get_lambda,
+    aws_api_gateway_integration.post_lambda,
+    aws_api_gateway_resource.mosaify_method,
+    aws_api_gateway_method.get_method,
+    aws_api_gateway_method.post_method
   ]
 
   triggers = {
