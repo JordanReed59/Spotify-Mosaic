@@ -13,10 +13,10 @@ const otherParams = {
     },
     method:"POST",
     body:data,
-    // mode: 'no-cors'
+    mode: 'no-cors'
 }
 
 fetch("https://regres.in/api/users", otherParams)
     .then(res => console.log(res))
-    .then(data => data.json())
+    // .then(data => data.json())
     .catch(error => console.log(error))
