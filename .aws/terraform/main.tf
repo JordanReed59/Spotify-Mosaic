@@ -56,7 +56,7 @@ resource "aws_api_gateway_rest_api" "gateway" {
   description = "Terraform Serverless API Gateway for Mosaify"
 }
 
-resource "aws_api_gateway_resource" "get_method_resource" {
+resource "aws_api_gateway_resource" "mosaify_method_resource" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway.id}"
   parent_id   = "${aws_api_gateway_rest_api.gateway.root_resource_id}"
   path_part   = "mosaify"
@@ -64,7 +64,7 @@ resource "aws_api_gateway_resource" "get_method_resource" {
 
 resource "aws_api_gateway_method" "get_method" {
   rest_api_id   = aws_api_gateway_rest_api.gateway.id
-  resource_id   = aws_api_gateway_resource.get_method_resource.id
+  resource_id   = aws_api_gateway_resource.mosaify_method_resource.id
   http_method   = "GET"
   authorization = "NONE"
 }
@@ -81,7 +81,7 @@ resource "aws_api_gateway_integration" "lambda" {
 
 resource "aws_api_gateway_method" "post_method" {
   rest_api_id   = aws_api_gateway_rest_api.gateway.id
-  resource_id   = aws_api_gateway_resource.get_method_resource.id
+  resource_id   = aws_api_gateway_resource.mosaify_method_resource.id
   http_method   = "POST"
   authorization = "NONE"
 }
@@ -97,13 +97,34 @@ resource "aws_api_gateway_integration" "root_lambda" {
 }
 
 resource "aws_api_gateway_deployment" "deploy_api" {
+  rest_api_id = "${aws_api_gateway_rest_api.gateway.id}"
   depends_on = [
     "aws_api_gateway_integration.lambda",
     "aws_api_gateway_integration.root_lambda"
   ]
 
-  rest_api_id = "${aws_api_gateway_rest_api.gateway.id}"
-  stage_name  = "test"
+  triggers = {
+    # NOTE: The configuration below will satisfy ordering considerations,
+    #       but not pick up all future REST API changes. More advanced patterns
+    #       are possible, such as using the filesha1() function against the
+    #       Terraform configuration file(s) or removing the .id references to
+    #       calculate a hash against whole resources. Be aware that using whole
+    #       resources will show a difference after the initial implementation.
+    #       It will stabilize to only change when resources change afterwards.
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.mosaify_method.id,
+      aws_api_gateway_method.get_method.id,
+      aws_api_gateway_method.post_method.id,
+      aws_api_gateway_integration.get_lambda.id,
+      aws_api_gateway_integration.post_lambda.id
+    ]))
+  }
+}
+
+resource "aws_api_gateway_stage" "example" {
+  deployment_id = aws_api_gateway_deployment.deploy_api.id
+  rest_api_id   = aws_api_gateway_rest_api.gateway.id
+  stage_name    = "test"
 }
 
 ########## Lambda configuration ##########
