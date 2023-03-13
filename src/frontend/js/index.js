@@ -1,4 +1,5 @@
-const url = "https://af49q1sh2m.execute-api.***.amazonaws.com/test/mosaify";
+const url = "https://af49q1sh2m.execute-api.us-east-1.amazonaws.com/test/mosaify";
+const resource = "/mosaify"
 const queryStringParameter = "test";
 const queryStringParameterValue = 1234;
 
@@ -7,22 +8,30 @@ const data = {
 }
 
 const otherParams = {
-    headers:{
-        "Content-Type" : "application/json; charset=UTF-8"
-    },
-    method:"POST",
-    body:JSON.stringify(data),
+    // headers:{
+    //     "Content-Type" : "application/json; charset=UTF-8"
+    // },
+    method:"GET",
+    // body:JSON.stringify(data),
     mode: 'no-cors'
 }
 
-fetch(url, otherParams)
+fetch(url, otherParams) 
     .then(res => {
-        if (res.ok) {
-            console.log(res)
-        }
-        else {
-            console.log("response wasn't successful")
-        }
+        console.log(res)
+        // if (res.ok) {
+        //     console.log('success!', res);
+        // }
     })
-    // .then(data => data.json())
-    .catch(error => console.log(error))
+    .catch(error => console.warn('Something went wrong.', error))
+// fetch(url, otherParams)
+//     .then(res => {
+//         if (res.ok) {
+//             console.log(res)
+//         }
+//         else {
+//             console.log("response wasn't successful")
+//         }
+//     })
+//     .then(data => data.json())
+    // .catch(error => console.log(error))
