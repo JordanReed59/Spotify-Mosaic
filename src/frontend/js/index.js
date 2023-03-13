@@ -17,6 +17,6 @@ const otherParams = {
 };
 
 fetch(url, otherParams)
-.then(data=>{return data.json()})
-.then(res=>{console.log(res)})
-.catch(error=>console.log(error));
+// .then(data=>{return data.json()})
+// .then(res=>{console.log(res)})
+// .catch(error=>console.log(error));
