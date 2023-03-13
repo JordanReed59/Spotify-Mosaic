@@ -4,7 +4,7 @@ const queryStringParameterValue = 1234;
 
 const data = {
     message:"Hello backend"
-};
+}
 
 const otherParams = {
     headers:{
@@ -13,10 +13,10 @@ const otherParams = {
     },
     method:"POST",
     body:data,
-    mode: 'no-cors'
-};
+    // mode: 'no-cors'
+}
 
-fetch(url, otherParams)
-    .then(data => data.json())
+fetch("https://regres.in/api/users", otherParams)
     .then(res => console.log(res))
+    .then(data => data.json())
     .catch(error => console.log(error))
