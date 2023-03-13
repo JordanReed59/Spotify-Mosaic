@@ -13,13 +13,13 @@
 
 def lambda_handler(event, context):
     # requests.get("https://www.google.com/search?q=hello")
-    # print(event)
+    print(event)
     response = {
         "statusCode": 200,
         "headers": {
             'Content-Type': 'text/html; charset=utf-8',
         },
-        "body": "Hello world"
+        "body": "The backend says hi!"
     }
 
     return response
