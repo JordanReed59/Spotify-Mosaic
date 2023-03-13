@@ -101,7 +101,7 @@ resource "aws_api_gateway_deployment" "deploy_api" {
   depends_on = [
     aws_api_gateway_integration.get_lambda,
     aws_api_gateway_integration.post_lambda,
-    aws_api_gateway_resource.mosaify_method,
+    aws_api_gateway_resource.mosaify_method_resource,
     aws_api_gateway_method.get_method,
     aws_api_gateway_method.post_method
   ]
