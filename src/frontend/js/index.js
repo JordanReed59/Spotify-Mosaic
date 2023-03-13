@@ -9,14 +9,13 @@ const data = {
 const otherParams = {
     headers:{
         "Content-Type" : "application/json; charset=UTF-8"
-
     },
     method:"POST",
-    body:data,
+    body:JSON.stringify(data),
     mode: 'no-cors'
 }
 
-fetch("https://google.com", otherParams)
+fetch(url, otherParams)
     .then(res => {
         if (res.ok) {
             console.log(res)
