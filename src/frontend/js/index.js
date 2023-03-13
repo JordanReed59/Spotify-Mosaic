@@ -16,7 +16,14 @@ const otherParams = {
     mode: 'no-cors'
 }
 
-fetch("https://regres.in/api/users", otherParams)
-    .then(res => console.log(res))
+fetch("https://google.com", otherParams)
+    .then(res => {
+        if (res.ok) {
+            console.log(res)
+        }
+        else {
+            console.log("response wasn't successful")
+        }
+    })
     // .then(data => data.json())
     .catch(error => console.log(error))
