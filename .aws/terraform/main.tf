@@ -115,7 +115,7 @@ resource "aws_api_gateway_deployment" "deploy_api" {
     #       resources will show a difference after the initial implementation.
     #       It will stabilize to only change when resources change afterwards.
     redeployment = sha1(jsonencode([
-      aws_api_gateway_resource.mosaify_method.id,
+      aws_api_gateway_resource.mosaify_method_resource.id,
       aws_api_gateway_method.get_method.id,
       aws_api_gateway_method.post_method.id,
       aws_api_gateway_integration.get_lambda.id,
