@@ -39,6 +39,12 @@ data "aws_iam_policy_document" "allow_public_access" {
   }
 }
 
+########## API Gateway configuration ##########
+resource "aws_api_gateway_rest_api" "gateway" {
+  name        = "mosaify_api"
+  description = "Terraform Serverless API Gateway for Mosaify"
+}
+
 ########## Lambda configuration ##########
 data "archive_file" "python_code_zip" {
   type        = "zip"
@@ -88,6 +94,14 @@ resource "aws_lambda_function" "terraform_lambda_func" {
   # layers                         = [aws_lambda_layer_version.lambda_layer_1.arn, aws_lambda_layer_version.lambda_layer_2.arn, aws_lambda_layer_version.lambda_layer_3.arn]
   layers                         = [for layer in aws_lambda_layer_version.lambda_layer : layer.arn]
   depends_on                     = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
+}
+
+resource "aws_lambda_permission" "lambda_permission" {
+  statement_id  = "AllowMosaifyAPIInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.terraform_lambda_func.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.gateway.execution_arn}/*"
 }
 
 ########## Role configuration ##########
