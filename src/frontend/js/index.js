@@ -16,7 +16,7 @@ const otherParams = {
     mode: 'no-cors'
 };
 
-fetch(url, otherParams)
+fetch(url)
 .then(data=>{return data.json()})
 .then(res=>{console.log(res)})
 .catch(error=>console.log(error));
