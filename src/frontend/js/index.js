@@ -12,7 +12,8 @@ const otherParams = {
 
     },
     method:"POST",
-    body:data
+    body:data,
+    mode: 'no-cors'
 }
 
 fetch(url, otherParams)
