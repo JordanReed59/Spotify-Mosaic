@@ -3,17 +3,16 @@ const queryStringParameter = "test";
 const queryStringParameterValue = 1234;
 
 const data = {
-    img_data : "dkslkdakldfkdlfd",
-    track_data : "djksahfj"
+    message:"Hello backend"
 }
 
 const otherParams = {
     headers:{
-        "content-type" : "application/json; charset=UTF-8"
+        "Content-Type" : "application/json; charset=UTF-8"
 
     },
-    body:data,
-    method:"POST"
+    method:"POST",
+    body:data
 }
 
 fetch(url, otherParams)
