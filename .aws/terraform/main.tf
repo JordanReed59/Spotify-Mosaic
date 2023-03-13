@@ -65,7 +65,7 @@ resource "aws_api_gateway_resource" "get_method_resource" {
 resource "aws_api_gateway_method" "get_method" {
   rest_api_id   = aws_api_gateway_rest_api.gateway.id
   resource_id   = aws_api_gateway_resource.get_method_resource.id
-  http_method   = "POST"
+  http_method   = "GET"
   authorization = "NONE"
 }
 
@@ -79,12 +79,12 @@ resource "aws_api_gateway_integration" "lambda" {
   uri                     = "${aws_lambda_function.mosaify_backend.invoke_arn}"
 }
 
-# resource "aws_api_gateway_method" "post_method" {
-#   rest_api_id   = aws_api_gateway_rest_api.gateway.id
-#   resource_id   = aws_api_gateway_rest_api.gateway.root_resource_id
-#   http_method   = "POST"
-#   authorization = "NONE"
-# }
+resource "aws_api_gateway_method" "post_method" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway.id
+  resource_id   = aws_api_gateway_resource.get_method_resource.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
 
 # resource "aws_api_gateway_integration" "root_lambda" {
 #   rest_api_id = "${aws_api_gateway_rest_api.gateway.id}"
