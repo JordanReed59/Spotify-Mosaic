@@ -94,7 +94,7 @@ resource "aws_api_gateway_integration" "root_lambda" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = "${aws_lambda_function.mosaify_backend.invoke_arn}"
-# }
+}
 
 resource "aws_api_gateway_deployment" "deploy_api" {
   depends_on = [
